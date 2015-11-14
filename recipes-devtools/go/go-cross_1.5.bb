@@ -24,30 +24,13 @@ do_compile() {
   ## Setting `$GOBIN` doesn't do any good, looks like it ends up copying binaries there.
   export GOROOT_FINAL="${SYSROOT}${libdir}/go"
 
-  export GOHOSTOS="linux"
-  export GOOS="linux"
-
-  export GOARCH="${TARGET_ARCH}"
-  if [ "${TARGET_ARCH}" = "x86_64" ]; then
-    export GOARCH="amd64"
-  fi
-  if [ "${TARGET_ARCH}" = "arm" ]
-  then
-    if [ `echo ${TUNE_PKGARCH} | cut -c 1-7` = "cortexa" ]
-    then
-      echo GOARM 7
-      export GOARM="7"
-    fi
-  fi
-  if [ "${TARGET_ARCH}" = "aarch64" ]; then
-    export GOARCH="arm64"
-  fi
+  setup_go_arch
 
   ## TODO: consider setting GO_EXTLINK_ENABLED
   export CGO_ENABLED="1"
   export CC=${BUILD_CC}
-  export CC_FOR_TARGET="${TARGET_SYS}-gcc"
-  export CXX_FOR_TARGET="${TARGET_SYS}-g++"
+  export CC_FOR_TARGET="${TARGET_PREFIX}gcc ${TARGET_CC_ARCH} --sysroot=${STAGING_DIR_TARGET}"
+  export CXX_FOR_TARGET="${TARGET_PREFIX}g++ ${TARGET_CC_ARCH} --sysroot=${STAGING_DIR_TARGET}"
   export GO_GCFLAGS="${HOST_CFLAGS}"
   export GO_LDFLAGS="${HOST_LDFLAGS}"
 

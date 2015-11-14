@@ -18,21 +18,7 @@ do_compile() {
   export GOHOSTOS="linux"
   export GOOS="linux"
 
-  export GOARCH="${TARGET_ARCH}"
-  #golang only support 386, amd64 and arm architecture.
-  if [ "${TARGET_ARCH}" = "x86_64" ]; then
-    export GOARCH="amd64"
-  elif [ "${TARGET_ARCH}" = "i586" ]; then
-    export GOARCH="386"
-  fi
-  if [ "${TARGET_ARCH}" = "arm" ]
-  then
-    if [ `echo ${TUNE_PKGARCH} | cut -c 1-7` = "cortexa" ]
-    then
-      echo GOARM 7
-      export GOARM="7"
-    fi
-  fi
+  setup_go_arch
 
   export CGO_ENABLED="1"
   ## TODO: consider setting GO_EXTLINK_ENABLED
