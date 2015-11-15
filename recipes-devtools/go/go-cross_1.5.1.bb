@@ -1,23 +1,18 @@
-require go.inc
 require go_${PV}.inc
 
 inherit cross
 
 SRC_URI += "\
         file://Fix-ccache-compilation-issue.patch \
+        file://fix-cross-compilation.patch \
         "
 
 do_compile() {
   ## install a build of Go 1.4 in the SYSROOT so we don't need it anywhere else
   ## in the system (as it currently is the default)
-  export GOROOT_BOOTSTRAP_INSTALL="${STAGING_DIR_HOST}/go1.4"
-  export GOROOT_BOOTSTRAP="${GOROOT_BOOTSTRAP_INSTALL}/go"
+  export GOROOT_BOOTSTRAP="${WORKDIR}/go-${GO_BOOTSTRAP_VERSION}/go"
 
-  mkdir -p ${GOROOT_BOOTSTRAP_INSTALL}
-  cd ${GOROOT_BOOTSTRAP_INSTALL}
-  wget ${SRC_URI_GO_BOOTSTRAP}
-  tar -xzvf ${GO_BOOTSTRAP_SOURCE}
-  cd - && cd ${GOROOT_BOOTSTRAP_INSTALL}/go/src/
+  cd ${GOROOT_BOOTSTRAP}/src
   ./all.bash
   cd -
 
@@ -26,15 +21,30 @@ do_compile() {
 
   setup_go_arch
 
+  # Is there a bug in the cross-compiler support for CGO? Can't get it
+  # to work without this wrapper
+  cat > ${WORKDIR}/${TARGET_PREFIX}gcc <<EOT
+#!/bin/sh
+exec ${TARGET_PREFIX}gcc ${TARGET_CC_ARCH} --sysroot=${STAGING_DIR_TARGET} "\$@"
+EOT
+  chmod +x ${WORKDIR}/${TARGET_PREFIX}gcc
+
+  cat > ${WORKDIR}/${TARGET_PREFIX}g++ <<EOT
+#!/bin/sh
+exec ${TARGET_PREFIX}g++ ${TARGET_CC_ARCH} --sysroot=${STAGING_DIR_TARGET} "\$@"
+EOT
+  chmod +x ${WORKDIR}/${TARGET_PREFIX}g++
+
   ## TODO: consider setting GO_EXTLINK_ENABLED
   export CGO_ENABLED="1"
   export CC=${BUILD_CC}
-  export CC_FOR_TARGET="${TARGET_PREFIX}gcc ${TARGET_CC_ARCH} --sysroot=${STAGING_DIR_TARGET}"
-  export CXX_FOR_TARGET="${TARGET_PREFIX}g++ ${TARGET_CC_ARCH} --sysroot=${STAGING_DIR_TARGET}"
+  export CC_FOR_TARGET="${WORKDIR}/${TARGET_PREFIX}gcc"
+  export CXX_FOR_TARGET="${WORKDIR}/${TARGET_PREFIX}g++"
   export GO_GCFLAGS="${HOST_CFLAGS}"
   export GO_LDFLAGS="${HOST_LDFLAGS}"
 
-  cd src && bash -x ./make.bash
+  set > ${WORKDIR}/go-${PV}.env
+  cd ${WORKDIR}/go-${PV}/go/src && bash -x ./make.bash
 
   ## The result is `go env` giving this:
   # GOARCH="amd64"
@@ -57,20 +67,19 @@ do_compile() {
 }
 
 do_install() {
-  ## It turns out that `${D}${bindir}` is already populated by compilation script
-  ## We need to copy the rest, unfortunatelly pretty much everything [1, 2].
-  ##
-  ## [1]: http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/dev-lang/go/go-1.3.1.ebuild?view=markup)
-  ## [2]: https://code.google.com/p/go/issues/detail?id=2775
+  GOROOT_FINAL="${D}${libdir}/go"
 
-  ## It should be okay to ignore `${WORKDIR}/go/bin/linux_arm`...
-  ## Also `gofmt` is not needed right now.
-  install -d "${D}${bindir}"
-  install -m 0755 "${WORKDIR}/go/bin/go" "${D}${bindir}"
-  install -d "${D}${libdir}/go"
-  ## TODO: use `install` instead of `cp`
-  for dir in lib pkg src test
-  do cp -a "${WORKDIR}/go/${dir}" "${D}${libdir}/go/"
+  install -d "${D}${bindir}" "${GOROOT_FINAL}"
+  tar -C "${WORKDIR}/go-${PV}/go" -cf - bin lib src pkg test |
+  tar -C "${GOROOT_FINAL}" -xpf -
+  mv "${GOROOT_FINAL}/bin/"* "${D}${bindir}/"
+
+  for t in gcc g++ ; do
+    cat > ${GOROOT_FINAL}/bin/${TARGET_PREFIX}${t} <<EOT
+#!/bin/sh
+exec ${TARGET_PREFIX}${t} ${TARGET_CC_ARCH} --sysroot=${STAGING_DIR_TARGET} "\$@"
+EOT
+    chmod +x ${GOROOT_FINAL}/bin/${TARGET_PREFIX}${t}
   done
 }
 

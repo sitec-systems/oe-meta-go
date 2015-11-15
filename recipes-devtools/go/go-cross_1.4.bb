@@ -1,4 +1,3 @@
-require go.inc
 require go_${PV}.inc
 
 inherit cross
