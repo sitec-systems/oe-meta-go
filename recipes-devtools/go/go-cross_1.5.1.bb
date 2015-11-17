@@ -10,11 +10,7 @@ SRC_URI += "\
 do_compile() {
   ## install a build of Go 1.4 in the SYSROOT so we don't need it anywhere else
   ## in the system (as it currently is the default)
-  export GOROOT_BOOTSTRAP="${WORKDIR}/go-${GO_BOOTSTRAP_VERSION}/go"
-
-  cd ${GOROOT_BOOTSTRAP}/src
-  ./all.bash
-  cd -
+  export GOROOT_BOOTSTRAP="${SYSROOT}${libdir}/go-bootstrap-${GO_BOOTSTRAP_VERSION}"
 
   ## Setting `$GOBIN` doesn't do any good, looks like it ends up copying binaries there.
   export GOROOT_FINAL="${SYSROOT}${libdir}/go"
