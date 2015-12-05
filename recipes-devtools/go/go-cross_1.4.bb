@@ -1,5 +1,7 @@
 require go_${PV}.inc
 
+DEPENDS = "virtual/${TARGET_PREFIX}gcc"
+
 inherit cross
 
 SRC_URI += "\

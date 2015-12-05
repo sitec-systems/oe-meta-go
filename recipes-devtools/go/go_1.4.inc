@@ -17,5 +17,3 @@ SRC_URI += "\
         "
 
 S = "${WORKDIR}/go-${PV}/go"
-
-DEPENDS = "virtual/${TARGET_PREFIX}gcc"
