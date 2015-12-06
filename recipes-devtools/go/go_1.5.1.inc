@@ -9,3 +9,39 @@ LIC_FILES_CHKSUM = "file://${WORKDIR}/go-${PV}/go/LICENSE;md5=591778525c869cdde0
 S = "${WORKDIR}/go-${PV}/go"
 
 DEPENDS = "go-bootstrap"
+
+SRC_URI += "\
+        file://Fix-ccache-compilation-issue.patch \
+        file://fix-cross-compilation.patch \
+        "
+
+setup_cgo_gcc_wrapper() {
+  # Is there a bug in the cross-compiler support for CGO? Can't get it
+  # to work without this wrapper
+  for t in gcc g++ ; do
+    cat > ${WORKDIR}/${TARGET_PREFIX}${t} <<EOT
+#!/bin/sh
+exec ${TARGET_PREFIX}${t} ${TARGET_CC_ARCH} --sysroot=${STAGING_DIR_TARGET} "\$@"
+EOT
+    chmod +x ${WORKDIR}/${TARGET_PREFIX}${t}
+  done
+}
+
+do_install() {
+  GOROOT_FINAL="${D}${libdir}/go"
+
+  install -d "${D}${bindir}" "${GOROOT_FINAL}"
+  tar -C "${WORKDIR}/go-${PV}/go" -cf - bin lib src pkg test |
+  tar -C "${GOROOT_FINAL}" -xpf -
+  mv "${GOROOT_FINAL}/bin/"* "${D}${bindir}/"
+
+  for t in gcc g++ ; do
+    cat > ${GOROOT_FINAL}/bin/${TARGET_PREFIX}${t} <<EOT
+#!/bin/sh
+exec ${TARGET_PREFIX}${t} ${TARGET_CC_ARCH} --sysroot=${STAGING_DIR_TARGET} "\$@"
+EOT
+    chmod +x ${GOROOT_FINAL}/bin/${TARGET_PREFIX}${t}
+  done
+}
+
+## TODO: implement do_clean() and ensure we actually do rebuild super cleanly

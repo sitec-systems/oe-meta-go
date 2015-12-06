@@ -1,4 +1,4 @@
-inherit cross
+inherit native
 
 require go_${PV}.inc
 

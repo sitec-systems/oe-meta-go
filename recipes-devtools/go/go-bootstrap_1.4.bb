@@ -1,6 +1,6 @@
-require go_${PV}.inc
-
 inherit native
+
+require go_${PV}.inc
 
 do_compile() {
   ## Setting `$GOBIN` doesn't do any good, looks like it ends up copying binaries there.
@@ -28,11 +28,3 @@ do_compile() {
   # log the resulting environment
   env "GOROOT=${WORKDIR}/go-${PV}/go" "${WORKDIR}/go-${PV}/go/bin/go" env
 }
-
-do_install() {
-  install -d "${D}${libdir}/${PN}-${PV}"
-  tar -C "${WORKDIR}/go-${PV}/go/" -cf - bin include lib pkg src test |
-  tar -C "${D}${libdir}/${PN}-${PV}" -xpf -
-}
-
-## TODO: implement do_clean() and ensure we actually do rebuild super cleanly
