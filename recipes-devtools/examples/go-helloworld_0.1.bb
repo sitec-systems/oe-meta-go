@@ -1,5 +1,7 @@
 require go-examples.inc
 
+inherit go
+
 SRC_URI += " \
   file://helloworld.go \
 "

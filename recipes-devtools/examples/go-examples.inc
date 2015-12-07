@@ -4,8 +4,6 @@ HOMEPAGE = "https://golang.org/"
 
 DEPENDS = "go-cross"
 
-export GOARCH="arm"
-
 FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
 
 LICENSE = "MIT"
