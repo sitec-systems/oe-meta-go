@@ -5,6 +5,10 @@ LICENSE = "BSD-3-Clause"
 SRC_URI_PREFIX = "http://golang.org/dl/"
 GO_BOOTSTRAP_VERSION="1.4.3"
 
+LIC_FILES_CHKSUM = "file://${WORKDIR}/go-${PV}/go/LICENSE;md5=591778525c869cdde0ab5a1bf283cd81"
+
+S = "${WORKDIR}/go-${PV}/go"
+
 setup_go_arch() {
   export GOHOSTOS="linux"
   export GOOS="linux"
@@ -33,4 +37,16 @@ setup_go_arch() {
       ;;
   esac
   export GOARCH
+}
+
+setup_cgo_gcc_wrapper() {
+  # Is there a bug in the cross-compiler support for CGO? Can't get it
+  # to work without this wrapper
+  for t in gcc g++ ; do
+    cat > ${WORKDIR}/${TARGET_PREFIX}${t} <<EOT
+#!/bin/sh
+exec ${TARGET_PREFIX}${t} ${TARGET_CC_ARCH} --sysroot=${STAGING_DIR_TARGET} "\$@"
+EOT
+    chmod +x ${WORKDIR}/${TARGET_PREFIX}${t}
+  done
 }
