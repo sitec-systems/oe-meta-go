@@ -3,7 +3,7 @@ HOMEPAGE = "https://golang.org/"
 LICENSE = "BSD-3-Clause"
 
 SRC_URI_PREFIX = "http://golang.org/dl/"
-GO_BOOTSTRAP_VERSION="1.4"
+GO_BOOTSTRAP_VERSION="1.4.3"
 
 setup_go_arch() {
   export GOHOSTOS="linux"
