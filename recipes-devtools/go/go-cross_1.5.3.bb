@@ -13,7 +13,7 @@ do_compile() {
   setup_cgo_gcc_wrapper
 
   ## TODO: consider setting GO_EXTLINK_ENABLED
-  export CGO_ENABLED="1"
+  export CGO_ENABLED="${GO_CROSS_CGO_ENABLED}"
   export CC=${BUILD_CC}
   export CC_FOR_TARGET="${WORKDIR}/${TARGET_PREFIX}gcc"
   export CXX_FOR_TARGET="${WORKDIR}/${TARGET_PREFIX}g++"

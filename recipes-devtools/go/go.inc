@@ -4,6 +4,7 @@ LICENSE = "BSD-3-Clause"
 
 SRC_URI_PREFIX = "http://golang.org/dl/"
 GO_BOOTSTRAP_VERSION="1.4.3"
+GO_CROSS_CGO_ENABLED?="0"
 
 LIC_FILES_CHKSUM = "file://${WORKDIR}/go-${PV}/go/LICENSE;md5=591778525c869cdde0ab5a1bf283cd81"
 

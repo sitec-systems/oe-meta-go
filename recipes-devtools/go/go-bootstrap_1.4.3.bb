@@ -8,7 +8,7 @@ do_compile() {
 
   setup_go_arch
 
-  export CGO_ENABLED="1"
+  export CGO_ENABLED="0"
   ## TODO: consider setting GO_EXTLINK_ENABLED
 
   ## You'd expect this to be the correct values for building Go for the

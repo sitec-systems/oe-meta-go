@@ -10,7 +10,7 @@ do_compile() {
 
   setup_go_arch
 
-  export CGO_ENABLED="1"
+  export CGO_ENABLED="${GO_CROSS_CGO_ENABLED}"
   ## TODO: consider setting GO_EXTLINK_ENABLED
 
   export CC="${BUILD_CC}"
