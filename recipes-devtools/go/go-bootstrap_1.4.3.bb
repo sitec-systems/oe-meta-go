@@ -4,7 +4,7 @@ inherit native
 
 do_compile() {
   ## Setting `$GOBIN` doesn't do any good, looks like it ends up copying binaries there.
-  export GOROOT_FINAL="${GOROOT_BOOTSTRAP}"
+  export GOROOT_FINAL="${SYSROOT}${nonarch_libdir}/${PN}-${PV}"
 
   setup_go_arch
 

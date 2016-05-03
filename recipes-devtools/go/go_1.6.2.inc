@@ -9,4 +9,5 @@ SRC_URI[go_1_6.sha256sum] = "787b0b750d037016a30c6ed05a8a70a91b2e9db4bd9b1a2453a
 SRC_URI += "\
         file://Fix-ccache-compilation-issue.patch \
         file://fix-cross-compilation.patch \
+        file://do_not_create_native_cross_compilation_tools.patch \
         "
