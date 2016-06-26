@@ -5,7 +5,7 @@ DEPENDS = "go-bootstrap"
 do_go_install() {
   install -d "${D}${bindir}" "${GOROOT_FINAL}"
   tar -C "${WORKDIR}/go-${PV}/go" -cf - bin lib src pkg test |
-  tar -C "${GOROOT_FINAL}" -xpf -
+  tar -C "${GOROOT_FINAL}" -xf -
   mv "${GOROOT_FINAL}/bin/"* "${D}${bindir}/"
 
   for t in gcc g++ ; do

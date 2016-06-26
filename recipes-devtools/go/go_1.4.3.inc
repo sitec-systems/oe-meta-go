@@ -17,7 +17,7 @@ SRC_URI += "\
 do_install() {
   install -d "${D}${libdir}/${PN}-${PV}"
   tar -C "${WORKDIR}/go-${PV}/go/" -cf - bin include lib pkg src test |
-  tar -C "${D}${libdir}/${PN}-${PV}" -xpf -
+  tar -C "${D}${libdir}/${PN}-${PV}" -xf -
 }
 
 ## TODO: implement do_clean() and ensure we actually do rebuild super cleanly
