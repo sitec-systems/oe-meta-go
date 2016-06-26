@@ -2,10 +2,10 @@ inherit native
 
 require go_${PV}.inc
 
-do_compile() {
-  ## Setting `$GOBIN` doesn't do any good, looks like it ends up copying binaries there.
-  export GOROOT_FINAL="${SYSROOT}${libdir}/go"
+GOROOT_FINAL="${STAGING_LIBDIR_NATIVE}/go"
+export GOROOT_FINAL
 
+do_compile() {
   setup_go_arch
 
   export CGO_ENABLED="1"

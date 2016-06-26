@@ -2,11 +2,11 @@ inherit cross
 
 require go_${PV}.inc
 
-do_compile() {
-  export GOROOT_BOOTSTRAP="${STAGING_DIR_NATIVE}/${libdir_native}/go-bootstrap-${GO_BOOTSTRAP_VERSION}"
+GOROOT_FINAL="${libdir}/go"
+export GOROOT_FINAL
 
-  ## Setting `$GOBIN` doesn't do any good, looks like it ends up copying binaries there.
-  export GOROOT_FINAL="${libdir}/go"
+do_compile() {
+  export GOROOT_BOOTSTRAP="${GOROOT_BOOTSTRAP}"
 
   setup_go_arch
 

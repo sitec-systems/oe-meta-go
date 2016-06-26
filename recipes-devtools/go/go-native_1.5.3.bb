@@ -2,11 +2,13 @@ inherit native
 
 require go_${PV}.inc
 
+GOROOT_FINAL="${STAGING_LIBDIR_NATIVE}/go"
+export GOROOT_FINAL
+
 do_compile() {
-  export GOROOT_BOOTSTRAP="${SYSROOT}${libdir}/go-bootstrap-${GO_BOOTSTRAP_VERSION}"
+  export GOROOT_BOOTSTRAP="${GOROOT_BOOTSTRAP}"
 
   ## Setting `$GOBIN` doesn't do any good, looks like it ends up copying binaries there.
-  export GOROOT_FINAL="${SYSROOT}${libdir}/go"
 
   setup_go_arch
 

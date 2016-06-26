@@ -4,10 +4,10 @@ require go_${PV}.inc
 
 DEPENDS = "virtual/${TARGET_PREFIX}gcc"
 
-do_compile() {
-  ## Setting `$GOBIN` doesn't do any good, looks like it ends up copying binaries there.
-  export GOROOT_FINAL="${SYSROOT}${libdir}/go"
+GOROOT_FINAL="${STAGING_LIBDIR}/go"
+export GOROOT_FINAL
 
+do_compile() {
   setup_go_arch
 
   export CGO_ENABLED="${GO_CROSS_CGO_ENABLED}"

@@ -4,7 +4,7 @@ require go_${PV}.inc
 
 do_compile() {
   ## Setting `$GOBIN` doesn't do any good, looks like it ends up copying binaries there.
-  export GOROOT_FINAL="${libdir}/${PN}-${PV}"
+  export GOROOT_FINAL="${GOROOT_BOOTSTRAP}"
 
   setup_go_arch
 

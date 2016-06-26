@@ -3,8 +3,6 @@ require go.inc
 DEPENDS = "go-bootstrap"
 
 do_install() {
-  GOROOT_FINAL="${D}${libdir}/go"
-
   install -d "${D}${bindir}" "${GOROOT_FINAL}"
   tar -C "${WORKDIR}/go-${PV}/go" -cf - bin lib src pkg test |
   tar -C "${GOROOT_FINAL}" -xpf -
