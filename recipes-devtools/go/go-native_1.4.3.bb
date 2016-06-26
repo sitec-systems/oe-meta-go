@@ -1,9 +1,9 @@
-inherit native
-
 require go_${PV}.inc
 
 GOROOT_FINAL="${STAGING_LIBDIR_NATIVE}/go"
 export GOROOT_FINAL
+
+inherit native
 
 do_compile() {
   setup_go_arch

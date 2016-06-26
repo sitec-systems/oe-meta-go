@@ -1,6 +1,6 @@
-inherit native
-
 require go_${PV}.inc
+
+inherit native
 
 do_compile() {
   ## Setting `$GOBIN` doesn't do any good, looks like it ends up copying binaries there.

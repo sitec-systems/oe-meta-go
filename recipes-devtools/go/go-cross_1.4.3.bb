@@ -1,11 +1,11 @@
-inherit cross
-
 require go_${PV}.inc
-
-DEPENDS = "virtual/${TARGET_PREFIX}gcc"
 
 GOROOT_FINAL="${STAGING_LIBDIR}/go"
 export GOROOT_FINAL
+
+DEPENDS = "virtual/${TARGET_PREFIX}gcc"
+
+inherit cross
 
 do_compile() {
   setup_go_arch

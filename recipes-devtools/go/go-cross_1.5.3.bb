@@ -1,9 +1,9 @@
-inherit cross
-
 require go_${PV}.inc
 
 GOROOT_FINAL="${libdir}/go"
 export GOROOT_FINAL
+
+inherit cross
 
 do_compile() {
   export GOROOT_BOOTSTRAP="${GOROOT_BOOTSTRAP}"
@@ -25,4 +25,8 @@ do_compile() {
 
   # log the resulting environment
   env "GOROOT=${WORKDIR}/go-${PV}/go" "${WORKDIR}/go-${PV}/go/bin/go" env
+}
+
+do_install() {
+  do_go_install
 }
