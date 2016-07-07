@@ -1,3 +1,6 @@
+# Go binaries are not understood by the strip tool.
+INHIBIT_SYSROOT_STRIP = "1"
+
 do_compile() {
   export GOROOT_BOOTSTRAP="${GOROOT_BOOTSTRAP}"
 
