@@ -12,14 +12,14 @@ LIC_FILES_CHKSUM = "file://src/${GO_IMPORT}/LICENSE.txt;md5=e3fc50a88d0a364313df
 FILES_${PN} += "${GOBIN_FINAL}/*"
 
 DEPENDS += "\
-	github.com-BurntSushi-toml \
+	github.com-burntsushi-toml \
 	github.com-dustin-go-humanize \
 	github.com-flynn-go-shlex \
 	github.com-gorilla-websocket \
 	github.com-hashicorp-go-syslog \
 	github.com-jimstudt-http-authentication \
 	github.com-russross-blackfriday \
-	github.com-shurcooL-sanitized-anchor-name \
+	github.com-shurcool-sanitized-anchor-name \
 	github.com-square-go-jose \
 	github.com-xenolf-lego \
 	golang.org-x-crypto \
