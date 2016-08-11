@@ -39,7 +39,9 @@ do_go_install() {
 		-name \*.indirectionsymlink -o \
 		-name .git\* -o                \
 		-name .hg -o                   \
-		-name .svn                     \
+		-name .svn -o                  \
+		-name .pc\* -o                 \
+		-name patches\*                \
 		\) -print0 | \
 	xargs -r0 rm -rf
 
