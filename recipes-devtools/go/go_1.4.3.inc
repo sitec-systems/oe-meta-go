@@ -14,6 +14,8 @@ SRC_URI += "\
         file://0001-cmd-ld-set-alignment-for-the-.rel.plt-section-on-32-.patch \
         "
 
+LIC_FILES_CHKSUM = "file://${WORKDIR}/go-${PV}/go/LICENSE;md5=591778525c869cdde0ab5a1bf283cd81"
+
 do_install() {
   install -d "${D}${libdir}/${PN}-${PV}"
   tar -C "${WORKDIR}/go-${PV}/go/" -cf - bin include lib pkg src test |

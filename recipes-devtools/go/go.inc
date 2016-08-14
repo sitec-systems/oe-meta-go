@@ -5,9 +5,7 @@ LICENSE = "BSD-3-Clause"
 SRC_URI_PREFIX = "http://golang.org/dl/"
 GO_BOOTSTRAP_VERSION="1.4.3"
 GO_CROSS_CGO_ENABLED?="0"
-GOROOT_BOOTSTRAP="${STAGING_LIBDIR_NATIVE}/go-bootstrap-${GO_BOOTSTRAP_VERSION}"
-
-LIC_FILES_CHKSUM = "file://${WORKDIR}/go-${PV}/go/LICENSE;md5=591778525c869cdde0ab5a1bf283cd81"
+GOROOT_BOOTSTRAP="${STAGING_LIBDIR_NATIVE}/go-bootstrap-native-${GO_BOOTSTRAP_VERSION}"
 
 S = "${WORKDIR}/go-${PV}/go"
 
@@ -15,30 +13,42 @@ setup_go_arch() {
   export GOHOSTOS="linux"
   export GOOS="linux"
 
-  case "${TARGET_ARCH}" in
-    x86_64)
-      GOARCH=amd64
-      ;;
-    i586|i686)
-      GOARCH=386
-      ;;
+  translate_arch() {
+    local ARCH
+    case "$1" in
+      x86_64)
+        ARCH=amd64
+        ;;
+      i586|i686)
+        ARCH=386
+        ;;
+      arm)
+        ARCH=arm
+        ;;
+      aarch64)
+        # ARM64 is invalid for Go 1.4
+        ARCH=arm64
+        ;;
+    esac
+
+    echo "${ARCH}"
+  }
+
+  GOARCH=`translate_arch "${TARGET_ARCH}"`
+  export GOARCH
+
+  case "${GOARCH}" in
     arm)
-      GOARCH=${TARGET_ARCH}
       case "${TUNE_PKGARCH}" in
         cortexa*)
           export GOARM=7
           ;;
       esac
-      ;;
-    aarch64)
-      # ARM64 is invalid for Go 1.4
-      GOARCH=arm64
-      ;;
-    *)
-      GOARCH="${TARGET_ARCH}"
-      ;;
+    ;;
   esac
-  export GOARCH
+
+  GOHOSTARCH=`translate_arch "${BUILD_ARCH}"`
+  export GOHOSTARCH
 }
 
 setup_cgo_gcc_wrapper() {
