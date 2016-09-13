@@ -3,8 +3,8 @@ require go.inc
 DEPENDS = "go-bootstrap-native"
 
 SRC_URI = "${SRC_URI_PREFIX}/go${PV}.src.tar.gz;subdir=go-${PV}"
-SRC_URI[md5sum] = "a30c3bd1a7fcc6a48acfb74936a19b4c"
-SRC_URI[sha256sum] = "72680c16ba0891fcf2ccf46d0f809e4ecf47bbf889f5d884ccb54c5e9a17e1c0"
+SRC_URI[md5sum] = "433e2158e5c28fe24b11622df393cc46"
+SRC_URI[sha256sum] = "2b843f133b81b7995f26d0cb64bbdbb9d0704b90c44df45f844d28881ad442d3"
 
 SRC_URI += "\
         file://fix-cross-compilation.patch \
